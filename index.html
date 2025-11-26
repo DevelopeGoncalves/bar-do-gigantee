@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-C9RLS2SDCJ"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -20,7 +19,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
@@ -40,6 +38,7 @@
   </script>
 
   <style>
+    /* Estilos existentes... */
     body { -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
     .sidebar-scroll { max-height: calc(100vh - 96px); overflow:auto; }
     ::-webkit-scrollbar { width:10px; height:10px; }
@@ -69,6 +68,39 @@
       font-size: 12px; font-weight: bold; color: #ffffff;
       margin-top: 3px; letter-spacing: 1px;
     }
+
+    /* Estilos CORRIGIDOS para impressão do relatório avançado */
+    @media print {
+        body > div:not(#relatorio-print-area) {
+            display: none !important;
+        }
+        #root {
+            width: 100%;
+            display: block !important;
+        }
+        #relatorio-print-area {
+            display: block !important;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+        }
+        #relatorio-print-area h2 {
+            margin-top: 0;
+            padding-top: 0;
+        }
+        .no-print {
+            display: none !important;
+        }
+        /* Garantir que as tabelas sejam legíveis */
+        .print-table {
+            width: 100%;
+            font-size: 10px;
+        }
+        .print-table th, .print-table td {
+            padding: 4px;
+        }
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100">
@@ -79,19 +111,19 @@
   const { useState, useEffect, useMemo, useRef } = React;
 
   /**********************
-   * CONFIGURAÇÃO FIREBASE *
-   **********************/
+    * CONFIGURAÇÃO FIREBASE *
+    **********************/
   
   // ⚠️ SUBSTITUA ESTAS CREDENCIAIS PELAS SUAS DO FIREBASE!
   const firebaseConfig = {
-  apiKey: "AIzaSyCB5k2sLKlSopQ5xes6e_1ctpXnHA2Pluo",
-  authDomain: "bar-do-gigante.firebaseapp.com",
-  databaseURL: "https://bar-do-gigante-default-rtdb.firebaseio.com",
-  projectId: "bar-do-gigante",
-  storageBucket: "bar-do-gigante.firebasestorage.app",
-  messagingSenderId: "818575087702",
-  appId: "1:818575087702:web:e488390c6f8ec6471b83f7"
-};
+    apiKey: "AIzaSyCB5k2sLKlSopQ5xes6e_1ctpXnHA2Pluo",
+    authDomain: "bar-do-gigante.firebaseapp.com",
+    databaseURL: "https://bar-do-gigante-default-rtdb.firebaseio.com",
+    projectId: "bar-do-gigante",
+    storageBucket: "bar-do-gigante.firebasestorage.app",
+    messagingSenderId: "818575087702",
+    appId: "1:818575087702:web:e488390c6f8ec6471b83f7"
+  };
 
   // Inicializa Firebase
   if (!firebase.apps.length) {
@@ -100,8 +132,8 @@
   const db = firebase.database();
 
   /**********************
-   * Utilitários Firebase *
-   **********************/
+    * Utilitários Firebase *
+    **********************/
   const initialProdutosDefault = [
     { id: 1, nome: "Coca-Cola 2L", preco: 8.5, estoque: 50, categoria: "Bebidas" },
     { id: 2, nome: "Cerveja Skol Lata", preco: 3.2, estoque: 120, categoria: "Bebidas" },
@@ -144,8 +176,8 @@
   }
 
   /**********
-   * Login *
-   **********/
+    * Login *
+    **********/
   const defaultUser = { username: 'admin', password: '1234' };
 
   function Login({onLogin}){
@@ -215,8 +247,8 @@
   }
 
   /****************
-   * Header, Side *
-   ****************/
+    * Header, Side *
+    ****************/
   function Header({user, onLogout}){
     return (
       <header className="bg-white shadow sticky top-0 z-30">
@@ -264,8 +296,8 @@
   }
 
   /*********************
-   * PDV & Comandas *
-   *********************/
+    * PDV & Comandas *
+    *********************/
   function PDVView({produtos, adicionarAoCarrinho, busca, setBusca, carrinho, alterarQuantidade, removerDoCarrinho, finalizarVenda, totalCarrinho, abrirComanda}){
     const produtosFiltrados = produtos.filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()) || p.categoria.toLowerCase().includes(busca.toLowerCase()));
 
@@ -280,8 +312,8 @@
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {produtosFiltrados.map(produto => (
                 <div key={produto.id}
-                     onClick={()=>adicionarAoCarrinho(produto)}
-                     className="p-4 rounded-2xl border cursor-pointer shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition bg-white">
+                      onClick={()=>adicionarAoCarrinho(produto)}
+                      className="p-4 rounded-2xl border cursor-pointer shadow-sm hover:shadow-lg transform hover:-translate-y-1 transition bg-white">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="text-sm text-gray-500">{produto.categoria}</div>
@@ -432,7 +464,7 @@
     );
   }
 
-  function PedidosView({ pedidos, setPedidos, finalizarPedidoEGerarVenda, comandas }) {
+  function PedidosView({ pedidos, setPedidos, finalizarPedidoEGerarVenda, comandas, limparPedidosFinalizados }) {
     function alterarStatus(id, novoStatus) {
       const novosPedidos = pedidos.map(p => p.id === id ? { ...p, status: novoStatus } : p);
       setPedidos(novosPedidos);
@@ -524,7 +556,18 @@
           </div>
           
           <div className="p-4 rounded-2xl shadow border border-green-200 bg-green-50">
-            <h3 className="font-bold text-xl mb-4 text-green-700">FINALIZADOS - {pedidosFinalizados.length}</h3>
+            <h3 className="font-bold text-xl mb-4 text-green-700">
+                FINALIZADOS - {pedidosFinalizados.length}
+                {pedidosFinalizados.length > 0 && (
+                    <button 
+                        onClick={limparPedidosFinalizados}
+                        className="text-xs text-red-600 ml-2 hover:underline"
+                        title="Apaga permanentemente os pedidos com status 'Vendido' ou 'Consumo Entregue'"
+                    >
+                        [Limpar]
+                    </button>
+                )}
+            </h3>
             <div className="space-y-4 max-h-[70vh] overflow-y-auto">
               {pedidosFinalizados.slice(0, 5).map(p => ( 
                 <div key={p.id} className="p-3 bg-white rounded-xl shadow-md border border-green-300">
@@ -532,6 +575,9 @@
                   <div className="text-right font-bold text-lg">{currency(p.total)}</div>
                 </div>
               ))}
+              {pedidosFinalizados.length > 5 && (
+                  <div className="text-center text-gray-500 text-sm">...e mais {pedidosFinalizados.length - 5} pedidos.</div>
+              )}
             </div>
           </div>
         </div>
@@ -612,124 +658,327 @@
   function RelatoriosView({ vendas, produtos }) {
     const areaRef = useRef(null);
     const barRef = useRef(null);
+    const pieRef = useRef(null); 
     
-    const series = useMemo(() => {
-      const map = {};
-      vendas.forEach(v => {
-        const day = v.data.split('T')[0];
-        map[day] = (map[day] || 0) + v.total;
-      });
-      const arr = Object.entries(map).map(([d, t]) => ({ date: d, total: t }));
-      arr.sort((a, b) => a.date.localeCompare(b.date));
-      return arr;
+    const CHART_COLORS = [
+        '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#a855f7',
+        '#4ade80', '#fbbf24', '#f87171', '#c084fc'
+    ];
+    
+    // UTILITY: Mapear produtos para encontrar o custo (preco) original
+    const productMap = useMemo(() => {
+        return produtos.reduce((map, p) => {
+            map[p.id] = p;
+            return map;
+        }, {});
+    }, [produtos]);
+
+    // Obtém a data de hoje no formato YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
+
+    // CÁLCULOS
+    
+    // 1. Receita e Custo por dia (para Gráfico e Tabela Diária)
+    const dailySeries = useMemo(() => {
+        const revenueMap = {};
+        const costMap = {}; 
+
+        vendas.forEach(v => {
+            const day = v.data.split('T')[0];
+            const vendaTotal = v.total;
+            let custoTotalVenda = 0;
+
+            v.itens.forEach(it => {
+                // Simulação de Custo (CMV)
+                const precoUnitario = it.preco; 
+                custoTotalVenda += precoUnitario * it.quantidade;
+            });
+
+            revenueMap[day] = (revenueMap[day] || 0) + vendaTotal;
+            costMap[day] = (costMap[day] || 0) + custoTotalVenda;
+        });
+
+        const allDates = [...new Set([...Object.keys(revenueMap), ...Object.keys(costMap)])];
+        allDates.sort((a, b) => a.localeCompare(b));
+
+        return allDates.map(date => ({
+            date: date,
+            revenue: revenueMap[date] || 0,
+            cost: costMap[date] || 0,
+            lucro: (revenueMap[date] || 0) - (costMap[date] || 0)
+        }));
     }, [vendas]);
 
-    const top = useMemo(() => {
+
+    // 2. Top Produtos (para Gráfico de Barras)
+    const topProdutosData = useMemo(() => {
       const vendaMap = {};
       let totalUnidadesVendidas = 0; 
 
       vendas.forEach(v => {
         v.itens.forEach(it => {
-          vendaMap[it.id] = vendaMap[it.id] || { nome: it.nome, quantidade: 0, total: 0 };
+          vendaMap[it.id] = vendaMap[it.id] || { id: it.id, nome: it.nome, quantidade: 0, total: 0 };
           vendaMap[it.id].quantidade += it.quantidade;
           vendaMap[it.id].total += it.preco * it.quantidade;
           totalUnidadesVendidas += it.quantidade; 
         });
       });
 
-      const topProdutosComDistribuicao = Object.values(vendaMap)
+      const list = Object.values(vendaMap)
         .sort((a, b) => b.quantidade - a.quantidade)
-        .slice(0, 6)
-        .map(p => ({
-          ...p,
-          distribuicao: totalUnidadesVendidas > 0 ? (p.quantidade / totalUnidadesVendidas) * 100 : 0
-        }));
+        .slice(0, 6);
         
-      return {
-        list: topProdutosComDistribuicao,
-        totalUnidades: totalUnidadesVendidas
-      };
+      return { list, totalUnidades: totalUnidadesVendidas };
     }, [vendas]);
+    
+    // 3. Distribuição por Categoria (para Gráfico de Pizza)
+    const categoriaDistribuicao = useMemo(() => {
+        const catMap = {};
+        let totalReceita = 0;
 
+        vendas.forEach(v => {
+            v.itens.forEach(it => {
+                const produtoOriginal = productMap[it.id] || { categoria: 'Outros' };
+                const categoria = produtoOriginal.categoria || 'Outros';
+                const receitaItem = it.preco * it.quantidade;
+
+                catMap[categoria] = (catMap[categoria] || 0) + receitaItem;
+                totalReceita += receitaItem;
+            });
+        });
+        
+        const labels = Object.keys(catMap);
+        const data = Object.values(catMap);
+
+        return { labels, data, total: totalReceita };
+    }, [vendas, productMap]);
+    
+    // 4. Resumo Simplificado para Cards
+    const resumoStats = useMemo(() => {
+        const receitaTotal = categoriaDistribuicao.total;
+        
+        // Calcular a Receita do Dia Atual
+        const receitaDoDia = dailySeries.find(day => day.date === today)?.revenue || 0;
+
+        return { 
+            receitaTotal, 
+            receitaDoDia
+        };
+    }, [categoriaDistribuicao.total, dailySeries, today]);
+
+
+    // EFEITOS (RENDERIZAÇÃO DOS GRÁFICOS)
     useEffect(() => {
-      if (areaRef.current && areaRef.current._chart) { try { areaRef.current._chart.destroy(); } catch { } }
-      if (barRef.current && barRef.current._chart) { try { barRef.current._chart.destroy(); } catch { } }
-      
-      if (areaRef.current && series.length > 0) {
-        const ctx = areaRef.current.getContext('2d');
-        const labels = series.map(s => s.date.substring(5));
-        const data = series.map(s => s.total);
-        areaRef.current._chart = new Chart(ctx, {
-          type: 'line',
-          data: { labels, datasets: [{ 
-            label: 'Receita (R$)', data, fill: true, tension: 0.3, 
-            borderColor: '#8b5cf6', 
-            backgroundColor: 'rgba(124,58,237,0.12)' 
-          }] },
-          options: { responsive: true, maintainAspectRatio: false }
-        });
+      // Destruir gráficos existentes
+      const destroyChart = (ref) => { if (ref.current && ref.current._chart) { try { ref.current._chart.destroy(); } catch { } } };
+      destroyChart(areaRef);
+      destroyChart(barRef);
+      destroyChart(pieRef); 
+
+      // 1. Gráfico de Receita e Custo por Dia (Linha Dupla)
+      if (areaRef.current) {
+        if (dailySeries.length > 0) {
+          areaRef.current.style.display = 'block';
+          const ctx = areaRef.current.getContext('2d');
+          const labels = dailySeries.map(s => s.date.substring(5));
+          const receitaData = dailySeries.map(s => s.revenue);
+          const custoData = dailySeries.map(s => s.cost); 
+
+          areaRef.current._chart = new Chart(ctx, {
+            type: 'line',
+            data: { 
+                labels, 
+                datasets: [
+                    { 
+                        label: 'Receita (R$)', 
+                        data: receitaData, 
+                        fill: false, 
+                        tension: 0.3, 
+                        borderColor: CHART_COLORS[0], // Roxo
+                        backgroundColor: 'rgba(139, 92, 246, 0.12)', 
+                    },
+                    { 
+                        label: 'Custo/Gasto (R$)', 
+                        data: custoData, 
+                        fill: false, 
+                        tension: 0.3, 
+                        borderColor: CHART_COLORS[4], // Vermelho
+                        backgroundColor: 'rgba(239, 68, 68, 0.12)', 
+                    }
+                ] 
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+          });
+        } else {
+          areaRef.current.style.display = 'none';
+        }
       }
 
-      if (barRef.current && top.list.length > 0) {
-        const ctx = barRef.current.getContext('2d');
-        const labels = top.list.map(t => t.nome);
-        const data = top.list.map(t => t.quantidade);
-        barRef.current._chart = new Chart(ctx, { 
-          type: 'bar', 
-          data: { labels, datasets: [{ label:'Quantidade', data, backgroundColor: '#4f46e5' }] }, 
-          options: { indexAxis:'y', responsive:true, maintainAspectRatio:false } 
-        });
+      // 2. Gráfico de Top Produtos (Barras)
+      if (barRef.current) {
+        if (topProdutosData.list.length > 0) {
+          barRef.current.style.display = 'block';
+          const ctx = barRef.current.getContext('2d');
+          const labels = topProdutosData.list.map(t => t.nome);
+          const data = topProdutosData.list.map(t => t.quantidade);
+          barRef.current._chart = new Chart(ctx, { 
+            type: 'bar', 
+            data: { labels, datasets: [{ label:'Quantidade Vendida', data, backgroundColor: CHART_COLORS[0] }] }, 
+            options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins: { legend: { display: false } } } 
+          });
+        } else {
+           barRef.current.style.display = 'none';
+        }
       }
-    }, [series, top.list]);
+      
+      // 3. Gráfico de Pizza (Distribuição por Categoria)
+      if (pieRef.current) {
+        if (categoriaDistribuicao.data.length > 0) {
+            pieRef.current.style.display = 'block';
+            const ctx = pieRef.current.getContext('2d');
+            pieRef.current._chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: categoriaDistribuicao.labels,
+                    datasets: [{
+                        data: categoriaDistribuicao.data,
+                        backgroundColor: CHART_COLORS.slice(0, categoriaDistribuicao.labels.length),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        } else {
+            pieRef.current.style.display = 'none';
+        }
+      }
+    }, [dailySeries, topProdutosData.list, categoriaDistribuicao]);
 
     return (
-      <div className="space-y-4">
-        <h2 className="text-3xl font-extrabold text-gray-800 border-b pb-2">📊 Relatórios</h2>
+      <div className="space-y-6">
+        <h2 className="text-3xl font-extrabold text-gray-800 border-b pb-2">📊 Relatórios Simples</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* RESUMO RÁPIDO SIMPLIFICADO */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="bg-white p-4 rounded-2xl shadow border border-green-200 col-span-2">
+                <div className="text-sm text-gray-500">Receita Total Acumulada</div>
+                <div className="font-bold text-3xl text-green-600">{currency(resumoStats.receitaTotal)}</div>
+            </div>
+            <div className="bg-white p-4 rounded-2xl shadow border border-indigo-200 col-span-2">
+                <div className="text-sm text-gray-500">Receita do Dia ({today.split('-').reverse().join('/')})</div>
+                <div className="font-bold text-3xl text-indigo-600">{currency(resumoStats.receitaDoDia)}</div>
+            </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 bg-white p-4 rounded-2xl shadow">
-            <h4 className="font-bold mb-2">Receita por dia</h4>
-            <div style={{ height: 240 }}>
-              {series.length > 0 ? <canvas ref={areaRef}></canvas> : <div className="text-gray-500 text-center py-10">Sem dados</div>}
+            <h4 className="font-bold mb-2">Receita vs. Custo (CMV) por dia (Gráfico)</h4>
+            <div style={{ height: 300, position: 'relative' }}>
+              <canvas ref={areaRef}></canvas>
+              {dailySeries.length === 0 && <div className="text-gray-500 text-center py-10 absolute inset-0 flex items-center justify-center">Sem dados de venda para o gráfico de linha.</div>}
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-2xl shadow">
-            <h4 className="font-bold mb-3">Top 6 Produtos</h4>
-            {top.list.length > 0 ? (
-              <div className="space-y-3">
-                {top.list.map((p, i) => (
-                  <div key={p.nome} className="text-sm">
-                    <div className="flex justify-between">
-                      <span className="font-medium">{i + 1}. {p.nome}</span>
-                      <span className="font-bold text-indigo-600">{p.distribuicao.toFixed(1)}%</span>
-                    </div>
-                    <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
-                      <div className="h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" style={{ width: `${p.distribuicao}%` }}></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-gray-500 text-center py-6">Sem dados</div>
-            )}
+            <h4 className="font-bold mb-3">Distribuição por Categoria (Gráfico de Pizza)</h4>
+            <div style={{ height: 300, position: 'relative' }}>
+                <canvas ref={pieRef}></canvas>
+                {categoriaDistribuicao.data.length === 0 && <div className="text-gray-500 text-center py-10 absolute inset-0 flex items-center justify-center">Sem dados de categoria.</div>}
+            </div>
+          </div>
+          
+          {/* TABELA DE DETALHE DIÁRIO MANTIDA */}
+          <div className="lg:col-span-3 bg-white p-4 rounded-2xl shadow">
+            <h4 className="font-bold mb-3">Detalhe Diário: Receita, Custo/Gasto (CMV) e Lucro Bruto</h4>
+            <div className="overflow-x-auto max-h-96">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-100 sticky top-0">
+                  <tr>
+                    <th className="p-3 text-left">Data</th>
+                    <th className="p-3 text-right text-green-600">Receita</th>
+                    <th className="p-3 text-right text-red-600">Custo/Gasto (CMV)</th>
+                    <th className="p-3 text-right text-purple-600">Lucro Bruto</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dailySeries.map(day => (
+                    <tr key={day.date} className="border-b hover:bg-gray-50">
+                      <td className="p-3 font-medium">{day.date.split('-').reverse().join('/')}</td>
+                      <td className="p-3 text-right">{currency(day.revenue)}</td>
+                      <td className="p-3 text-right">{currency(day.cost)}</td>
+                      <td className={`p-3 text-right font-bold ${day.lucro > 0 ? 'text-purple-600' : 'text-gray-500'}`}>{currency(day.lucro)}</td>
+                    </tr>
+                  ))}
+                  {dailySeries.length === 0 && (
+                      <tr><td colSpan="4" className="text-center text-gray-500 py-6">Sem dados de movimentação diária.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-3 bg-white p-4 rounded-2xl shadow">
+            <h4 className="font-bold mb-3">Top 6 Produtos Mais Vendidos (Quantidade)</h4>
+            <div style={{ height: 300, position: 'relative' }}>
+              <canvas ref={barRef}></canvas>
+              {topProdutosData.list.length === 0 && <div className="text-gray-500 text-center py-10 absolute inset-0 flex items-center justify-center">Sem dados de top produtos.</div>}
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  function RelatorioAvancado({ vendas }) { 
+  function RelatorioAvancado({ vendas, produtos, comandas, limparDadosPorData }) { 
     const [from, setFrom] = useState('');
     const [to, setTo] = useState('');
-    const chartRef = useRef(null);
+    const [filtroCategoria, setFiltroCategoria] = useState(''); 
+    const [filtroPagamento, setFiltroPagamento] = useState(''); 
+    const printAreaRef = useRef(null);
+    
+    // Lista de categorias únicas para o filtro
+    const categorias = useMemo(() => {
+        const unique = new Set(produtos.map(p => p.categoria).filter(c => c));
+        return ['Todas as Categorias', ...Array.from(unique).sort()];
+    }, [produtos]);
+    
+    const meiosPagamento = [
+        'Todos os Pagamentos',
+        'PDV Balcão (Venda Direta)',
+        'Comanda (Pré-pago)'
+    ];
 
     const vendasFiltradas = useMemo(() => {
       let filtered = vendas;
+      
+      // 1. Filtrar por Data
       if (from) filtered = filtered.filter(v => v.data.split('T')[0] >= from);
       if (to) filtered = filtered.filter(v => v.data.split('T')[0] <= to);
+
+      // 2. Filtrar por Meio de Pagamento
+      if (filtroPagamento === 'PDV Balcão (Venda Direta)') {
+          filtered = filtered.filter(v => v.origem === 'PDV Balcão');
+      } else if (filtroPagamento.includes('Comanda')) {
+          filtered = filtered.filter(v => v.origem.startsWith('Comanda'));
+      }
+      
+      // 3. Filtrar por Categoria
+      if (filtroCategoria && filtroCategoria !== 'Todas as Categorias') {
+          filtered = filtered.filter(venda => {
+              return venda.itens.some(itemVendido => {
+                  const produto = produtos.find(p => p.id === itemVendido.id);
+                  return produto && produto.categoria === filtroCategoria;
+              });
+          });
+      }
+      
       return filtered;
-    }, [vendas, from, to]);
+    }, [vendas, from, to, filtroPagamento, filtroCategoria, produtos]);
 
     const stats = useMemo(() => {
       const totalVendas = vendasFiltradas.length;
@@ -745,50 +994,158 @@
         });
       });
 
-      const topProdutos = Object.values(productsSold).sort((a, b) => b.quantidade - a.quantidade).slice(0, 6);
+      const topProdutos = Object.values(productsSold).sort((a, b) => b.quantidade - a.quantidade).slice(0, 10);
+      const vendasPorOrigem = vendasFiltradas.reduce((acc, v) => {
+          acc[v.origem] = (acc[v.origem] || 0) + v.total;
+          return acc;
+      }, {});
 
-      return { totalVendas, receitaTotal, ticketMedio, topProdutos };
+      return { totalVendas, receitaTotal, ticketMedio, topProdutos, vendasPorOrigem };
     }, [vendasFiltradas]);
+    
+    // Função de impressão
+    const handlePrint = () => {
+        window.print();
+    };
+    
+    // Função para formatar data e hora
+    const formatDateTime = (isoString) => {
+        if (!isoString) return '';
+        const date = new Date(isoString);
+        return date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    };
+    
+    // Funçao de Limpeza de dados por data
+    const handleLimparDados = () => {
+        if (!to) {
+            alert("Por favor, selecione a 'Data Final' para limpar os dados.");
+            return;
+        }
+        
+        if (!confirm(`ATENÇÃO! Esta ação apagará permanentemente TODAS AS VENDAS, PEDIDOS FINALIZADOS e COMANDAS FECHADAS ATÉ a data ${to.split('-').reverse().join('/')}. Continuar?`)) {
+            return;
+        }
+        
+        limparDadosPorData(to);
+    };
 
     return (
       <div className="space-y-6">
         <h2 className="text-3xl font-extrabold text-gray-800 border-b pb-2">📈 Relatório Avançado</h2>
 
-        <div className="bg-white border p-4 rounded-2xl shadow">
-          <h3 className="font-bold mb-3">Filtros</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className="block">
+        <div className="bg-white border p-4 rounded-2xl shadow no-print">
+          <h3 className="font-bold mb-3">Filtros e Ações</h3>
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <label className="block col-span-1">
               <span className="text-sm text-gray-500">Data Inicial</span>
               <input type="date" value={from} onChange={e => setFrom(e.target.value)} className="mt-1 block w-full p-3 border rounded-xl" />
             </label>
-            <label className="block">
+            <label className="block col-span-1">
               <span className="text-sm text-gray-500">Data Final</span>
               <input type="date" value={to} onChange={e => setTo(e.target.value)} className="mt-1 block w-full p-3 border rounded-xl" />
             </label>
-          </div>
+            
+            <label className="block col-span-1">
+              <span className="text-sm text-gray-500">Meio de Pagamento</span>
+              <select value={filtroPagamento} onChange={e => setFiltroPagamento(e.target.value)} className="mt-1 block w-full p-3 border rounded-xl bg-white">
+                {meiosPagamento.map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </label>
+            
+            <label className="block col-span-1">
+              <span className="text-sm text-gray-500">Categoria de Produto</span>
+              <select value={filtroCategoria} onChange={e => setFiltroCategoria(e.target.value)} className="mt-1 block w-full p-3 border rounded-xl bg-white">
+                {categorias.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </label>
+            
+            <button 
+                onClick={handlePrint} 
+                className="w-full h-full md:mt-6 py-3 px-4 bg-purple-600 text-white font-semibold rounded-xl hover:bg-purple-700 transition col-span-1"
+            >
+                🖨️ Imprimir
+            </button>
+            
+            <button 
+                onClick={handleLimparDados}
+                disabled={!to}
+                className={`w-full h-full md:mt-6 py-3 px-4 text-white font-semibold rounded-xl transition col-span-1 ${!to ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'}`}
+                title="Limpar Vendas, Pedidos e Comandas Fechadas até a Data Final selecionada"
+            >
+                🗑️ Limpar Dados
+            </button>
 
-          <div className="mt-6 grid grid-cols-3 gap-4">
-            <div className="bg-gray-50 p-3 rounded-xl text-center">
-              <div className="text-xs text-gray-500">Total Vendas</div>
-              <div className="font-bold text-lg">{stats.totalVendas}</div>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-xl text-center">
-              <div className="text-xs text-gray-500">Receita</div>
-              <div className="font-bold text-lg text-green-600">{currency(stats.receitaTotal)}</div>
-            </div>
-            <div className="bg-gray-50 p-3 rounded-xl text-center">
-              <div className="text-xs text-gray-500">Ticket Médio</div>
-              <div className="font-bold text-lg">{currency(stats.ticketMedio)}</div>
-            </div>
           </div>
+        </div>
+
+        {/* ÁREA DE IMPRESSÃO/EXIBIÇÃO */}
+        <div id="relatorio-print-area" ref={printAreaRef} className="bg-white p-6 rounded-2xl shadow print:shadow-none">
+            <h3 className="text-xl font-bold mb-4 border-b pb-2 print:text-center print:text-black">
+                Resumo de Vendas ({vendasFiltradas.length} Registros)
+            </h3>
+        
+            {vendasFiltradas.length === 0 ? (
+                <div className="text-center text-gray-500 p-8">Nenhuma venda encontrada com os filtros aplicados.</div>
+            ) : (
+                <div className="space-y-8">
+                    {/* 1. ESTATÍSTICAS CHAVE */}
+                    <div className="grid grid-cols-3 gap-4 border p-4 rounded-xl bg-gray-50 print:border print:bg-white">
+                        <div className="text-center">
+                            <div className="text-xs text-gray-500">Total de Vendas</div>
+                            <div className="font-bold text-lg">{stats.totalVendas}</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-xs text-gray-500">Receita Total</div>
+                            <div className="font-bold text-lg text-green-600">{currency(stats.receitaTotal)}</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-xs text-gray-500">Ticket Médio</div>
+                            <div className="font-bold text-lg">{currency(stats.ticketMedio)}</div>
+                        </div>
+                    </div>
+
+                    {/* 2. LISTAGEM DETALHADA DE VENDAS */}
+                    <div>
+                        <h4 className="font-bold mb-3 text-lg text-indigo-700">📜 Detalhe de Vendas Filtradas</h4>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm print-table">
+                                <thead className="bg-gray-200">
+                                    <tr>
+                                        <th className="p-2 text-left">ID</th>
+                                        <th className="p-2 text-left">Data/Hora</th>
+                                        <th className="p-2 text-left">Pagamento (Origem)</th>
+                                        <th className="p-2 text-left">Itens Vendidos</th>
+                                        <th className="p-2 text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {vendasFiltradas.map((v) => (
+                                        <tr key={v.id} className="border-b hover:bg-gray-50">
+                                            <td className="p-2 text-gray-500 text-xs">{v.id}</td>
+                                            <td className="p-2 text-xs">{formatDateTime(v.data)}</td>
+                                            <td className="p-2 text-xs">
+                                                {v.origem === 'PDV Balcão' ? 'Venda Direta' : 'Comanda'}
+                                            </td>
+                                            <td className="p-2 text-xs">
+                                                {v.itens.map(i => `${i.quantidade}x ${i.nome}`).join(', ')}
+                                            </td>
+                                            <td className="p-2 text-right font-bold text-green-600">{currency(v.total)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
       </div>
     );
   }
 
   /****************
-   * Main App *
-   ****************/
+    * Main App *
+    ****************/
   function App(){
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -802,20 +1159,62 @@
     const [busca, setBusca] = useState('');
     const [selected, setSelected] = useState('pdv');
 
+    // Funções de Limpeza de Dados
+    
+    function limparPedidosFinalizados() {
+        const finalizadosCount = pedidos.filter(p => p.status === 'Vendido' || p.status === 'Consumo Entregue').length;
+        if (finalizadosCount === 0) return alert('Nenhum pedido finalizado para apagar.');
+        
+        if (!confirm(`Tem certeza que deseja apagar ${finalizadosCount} pedidos finalizados permanentemente?`)) return;
+        
+        const novosPedidos = pedidos.filter(p => p.status !== 'Vendido' && p.status !== 'Consumo Entregue');
+        setPedidos(novosPedidos);
+        alert(`${finalizadosCount} pedidos finalizados foram apagados.`);
+    }
+    
+    function limparDadosPorData(dataLimiteISO) {
+        // Formato: YYYY-MM-DD
+        const dataLimite = dataLimiteISO;
+        
+        // 1. Limpar Vendas
+        const vendasApagar = vendas.filter(v => v.data.split('T')[0] <= dataLimite);
+        const novasVendas = vendas.filter(v => v.data.split('T')[0] > dataLimite);
+        setVendas(novasVendas);
+
+        // 2. Limpar Comandas Fechadas
+        // Filtra pelo dataFechamento, que é adicionado ao fechar a comanda (no sistema)
+        const comandasFechadasApagar = comandas.filter(c => c.status === 'Fechada' && c.dataFechamento && c.dataFechamento.split('T')[0] <= dataLimite);
+        const novasComandas = comandas.filter(c => c.status !== 'Fechada' || c.dataFechamento.split('T')[0] > dataLimite);
+        setComandas(novasComandas);
+
+        // 3. Limpar Pedidos Finalizados
+        // Pedidos são marcados como vendidos na finalização, data é a data original do pedido
+        const pedidosFinalizadosApagar = pedidos.filter(p => (p.status === 'Vendido' || p.status === 'Consumo Entregue') && p.data.split('T')[0] <= dataLimite);
+        const novosPedidos = pedidos.filter(p => (p.status !== 'Vendido' && p.status !== 'Consumo Entregue') || p.data.split('T')[0] > dataLimite);
+        setPedidos(novosPedidos);
+        
+        alert(`Limpeza concluída! ${vendasApagar.length} Vendas, ${comandasFechadasApagar.length} Comandas Fechadas e ${pedidosFinalizadosApagar.length} Pedidos Finalizados foram apagados permanentemente até ${dataLimite.split('-').reverse().join('/')}.`);
+    }
+
+
     // Carrega dados do Firebase na inicialização
     useEffect(() => {
       async function initData() {
         try {
-          // Inicializa produtos se não existirem
           let prods = await storageGet('produtos', null);
           if (!prods || prods.length === 0) {
             await storageSet('produtos', initialProdutosDefault);
             prods = initialProdutosDefault;
           }
           
-          const vends = await storageGet('vendas', []);
-          const peds = await storageGet('pedidos', []);
-          const coms = await storageGet('comandas', []);
+          const vendsObj = await storageGet('vendas', {});
+          const pedsObj = await storageGet('pedidos', {});
+          const comsObj = await storageGet('comandas', {});
+          
+          // Tratamento para arrays do Firebase
+          const vends = vendsObj ? Object.values(vendsObj).filter(v => v !== null) : [];
+          const peds = pedsObj ? Object.values(pedsObj).filter(p => p !== null) : [];
+          const coms = comsObj ? Object.values(comsObj).filter(c => c !== null) : [];
           
           setProdutos(prods);
           setVendas(vends);
@@ -823,7 +1222,7 @@
           setComandas(coms);
         } catch(e) {
           console.error('Erro ao carregar dados:', e);
-          alert('Erro ao conectar com Firebase. Verifique as credenciais!');
+          alert('Erro ao conectar com Firebase. Verifique as credenciais e regras de segurança!');
         } finally {
           setLoading(false);
         }
@@ -831,15 +1230,29 @@
       
       initData();
       
-      // Escuta mudanças em tempo real
-      storageWatch('pedidos', setPedidos);
-      storageWatch('comandas', setComandas);
-      storageWatch('produtos', setProdutos);
+      const setupListener = (refPath, setState) => {
+          const ref = db.ref(refPath);
+          ref.on('value', (snapshot) => {
+              if (snapshot.exists()) {
+                  // Filtra nulls para garantir arrays limpos
+                  setState(Object.values(snapshot.val() || {}).filter(item => item !== null));
+              } else {
+                  setState([]);
+              }
+          });
+          return ref;
+      };
+
+      const refPedidos = setupListener('pedidos', setPedidos);
+      const refComandas = setupListener('comandas', setComandas);
+      const refProdutos = setupListener('produtos', setProdutos);
+      const refVendas = setupListener('vendas', setVendas);
       
       return () => {
-        db.ref('pedidos').off();
-        db.ref('comandas').off();
-        db.ref('produtos').off();
+        refPedidos.off();
+        refComandas.off();
+        refProdutos.off();
+        refVendas.off(); 
       };
     }, []);
 
@@ -983,11 +1396,12 @@
           preco: i.preco
         })), 
         total: comanda.valorInicial, 
-        origem: `Comanda - ${comanda.nomeCliente}` 
+        origem: `Comanda - ${comanda.nomeCliente}`,
+        dataFechamento: new Date().toISOString()
       };
 
       setVendas([...vendas, vendaFinal]);
-      setComandas(comandas.map(c => c.id === comanda.id ? {...c, status: 'Fechada', dataFechamento: new Date().toISOString()} : c));
+      setComandas(comandas.map(c => c.id === comanda.id ? {...c, status: 'Fechada', dataFechamento: vendaFinal.dataFechamento} : c));
       alert(`Comanda ${comanda.nomeCliente} fechada!`);
     }
 
@@ -1040,13 +1454,14 @@
 
             {selected === 'pdv' && (
               <PDVView produtos={produtos} adicionarAoCarrinho={adicionarAoCarrinho} busca={busca} setBusca={setBusca}
-                     carrinho={carrinho} alterarQuantidade={alterarQuantidade} removerDoCarrinho={removerDoCarrinho}
-                     finalizarVenda={finalizarVenda} totalCarrinho={totalCarrinho} abrirComanda={abrirComanda} />
+                    carrinho={carrinho} alterarQuantidade={alterarQuantidade} removerDoCarrinho={removerDoCarrinho}
+                    finalizarVenda={finalizarVenda} totalCarrinho={totalCarrinho} abrirComanda={abrirComanda} />
             )}
 
             {selected === 'pedidos' && (
               <PedidosView pedidos={pedidos} setPedidos={setPedidos} 
                 finalizarPedidoEGerarVenda={finalizarPedidoEGerarVenda}
+                limparPedidosFinalizados={limparPedidosFinalizados}
                 comandas={comandas} />
             )}
             
@@ -1065,7 +1480,7 @@
             )}
 
             {selected === 'avancado' && (
-              <RelatorioAvancado vendas={vendas} produtos={produtos} />
+              <RelatorioAvancado vendas={vendas} produtos={produtos} comandas={comandas} limparDadosPorData={limparDadosPorData} />
             )}
           </main>
         </div>
